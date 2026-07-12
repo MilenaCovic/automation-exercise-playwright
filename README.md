@@ -150,11 +150,8 @@ Artifacts (reports, traces, screenshots) are uploaded on failure for debugging.
 
 ## 🔮 Improvements with More Time
 
-- [ ] Add **test tagging** (`@smoke`, `@regression`, `@p0`) for selective execution
 - [ ] Integrate with **Allure** or **Monocart** reporter for richer reporting
 - [ ] Add **visual regression tests** using Playwright snapshots or Percy
 - [ ] Add **accessibility audits** using `@axe-core/playwright`
 - [ ] Add **performance assertions** (LCP, CLS) using Playwright's `performance` API
-- [ ] Parallel cross-browser execution in CI with sharding
-- [ ] Test data factory pattern to reduce duplication in test fixtures
 - [ ] Dockerize the test suite for hermetic execution environment
