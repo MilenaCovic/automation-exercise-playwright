@@ -147,11 +147,3 @@ Artifacts (reports, traces, screenshots) are uploaded on failure for debugging.
 - Payment is mocked — no real credit card data is used or validated
 
 ---
-
-## 🔮 Improvements with More Time
-
-- [ ] Integrate with **Allure** or **Monocart** reporter for richer reporting
-- [ ] Add **visual regression tests** using Playwright snapshots or Percy
-- [ ] Add **accessibility audits** using `@axe-core/playwright`
-- [ ] Add **performance assertions** (LCP, CLS) using Playwright's `performance` API
-- [ ] Dockerize the test suite for hermetic execution environment
