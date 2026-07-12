@@ -1,0 +1,118 @@
+name: Playwright Tests — Automation Exercise
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  schedule:
+    # Nightly run at 06:00 UTC Monday–Friday for cross-browser checks
+    - cron: '0 6 * * 1-5'
+  workflow_dispatch:  # allow manual trigger
+
+jobs:
+  # ── API Tests ──────────────────────────────────────────────────
+  api-tests:
+    name: API Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run API tests
+        run: npx playwright test --project=api
+
+      - name: Upload test report (on failure)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-report
+          path: playwright-report/
+          retention-days: 7
+
+  # ── E2E Tests ──────────────────────────────────────────────────
+  e2e-tests:
+    name: E2E Tests (Chrome)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install chrome --with-deps
+
+      - name: Run E2E tests
+        run: npx playwright test --project=chrome
+
+      - name: Upload test report (on failure)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-report
+          path: playwright-report/
+          retention-days: 7
+
+      - name: Upload test traces (on failure)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-traces
+          path: test-results/
+          retention-days: 7
+
+  # ── Cross-browser (nightly only) ──────────────────────────────
+  cross-browser:
+    name: Cross-browser (${{ matrix.browser }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [firefox, webkit]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browser
+        run: npx playwright install ${{ matrix.browser }} --with-deps
+
+      - name: Run E2E on ${{ matrix.browser }}
+        run: npx playwright test --project=${{ matrix.browser }}
+
+      - name: Upload report (on failure)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-report-${{ matrix.browser }}
+          path: playwright-report/
+          retention-days: 7

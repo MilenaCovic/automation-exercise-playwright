@@ -1,0 +1,30 @@
+{
+  "name": "milenaproject",
+  "version": "1.0.0",
+  "description": "Playwright Test Automation — Automation Exercise (API + E2E)",
+  "scripts": {
+    "test": "npx playwright test --project=api --project=chrome",
+    "test:api": "npx playwright test --project=api",
+    "test:e2e": "npx playwright test --project=chrome",
+    "test:e2e:headed": "npx playwright test --project=chrome --headed",
+    "test:e2e:debug": "npx playwright test --project=chrome --debug",
+    "test:e2e:firefox": "npx playwright test --project=firefox",
+    "test:e2e:webkit": "npx playwright test --project=webkit",
+    "test:cross": "npx playwright test --project=chrome --project=firefox --project=webkit",
+    "test:ui:api": "npx playwright test --ui --project=api",
+    "test:ui:e2e": "npx playwright test --ui --project=chrome",
+    "test:ui:cross": "npx playwright test --ui --project=chrome --project=firefox --project=webkit",
+    "test:smoke": "npx playwright test --project=chrome --grep \"@smoke\"",
+    "test:critical": "npx playwright test --project=chrome --grep \"@critical\"",
+    "test:high": "npx playwright test --project=chrome --grep \"@high\"",
+    "test:medium": "npx playwright test --project=chrome --grep \"@medium\"",
+    "report": "npx playwright show-report",
+    "clean": "rimraf playwright-report test-results"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.45.0",
+    "@types/node": "^26.1.1",
+    "rimraf": "^5.0.0",
+    "typescript": "^5.5.0"
+  }
+}
