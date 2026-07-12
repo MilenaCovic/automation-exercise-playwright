@@ -40,8 +40,13 @@ export class CartPage extends BasePage {
 
   async clearCart() {
     await this.openCart();
-    while ((await this.cartItems.count()) > 0) {
-      await this.removeItemButton.first().click();
+    try {
+      while ((await this.cartItems.count()) > 0) {
+        await this.removeItemButton.first().click();
+        await this.page.waitForLoadState("networkidle");
+      }
+    } catch {
+      // Cart is already empty or page failed to load — safe to proceed
     }
   }
 

@@ -38,10 +38,11 @@ test.describe("E2E Tests", () => {
     loginPage = new LoginPage(page);
     checkoutPage = new CheckoutPage(page);
     contactUsPage = new ContactUsPage(page);
-    await cartPage.clearCart();
+    await homePage.openHome();
   });
 
   test("Complete checkout after login", { tag: ["@smoke", "@critical"] }, async ({ request }) => {
+    await cartPage.clearCart();
     const api = new ApiClient(request);
     const email = LoginPage.generateEmail();
     await api.createAccount(getApiAccountData(email));
@@ -66,6 +67,7 @@ test.describe("E2E Tests", () => {
   });
 
   test("Complete checkout with registration", { tag: ["@smoke", "@critical"] }, async ({ request }) => {
+    await cartPage.clearCart();
     const api = new ApiClient(request);
     const email = LoginPage.generateEmail();
     await api.createAccount(getApiAccountData(email));
@@ -100,6 +102,7 @@ test.describe("E2E Tests", () => {
   });
 
   test("Add product to cart, verify it, then remove it", { tag: ["@high"] }, async () => {
+    await cartPage.clearCart();
     await productsPage.openProducts();
     await productsPage.clickFirstViewProduct();
     await productsPage.clickButton(Button.addToCart);
@@ -127,6 +130,7 @@ test.describe("E2E Tests", () => {
   });
 
   test("Add multiple products to cart", { tag: ["@high"] }, async () => {
+    await cartPage.clearCart();
     await productsPage.openProductDetails(1);
     await productsPage.clickButton(Button.addToCart);
     await productsPage.assertProductAddedToCart();
@@ -144,7 +148,7 @@ test.describe("E2E Tests", () => {
   });
 
   test("Verify empty cart message", { tag: ["@medium"] }, async () => {
-    await cartPage.openCart();
+    await cartPage.clearCart();
     await cartPage.assertCartEmpty();
   });
 
